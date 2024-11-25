@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase Realtime Test</title>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js"></script>
 </head>
 <body>
     <h1>Live Text Copier</h1>
     <textarea id="textInput" placeholder="Skriv noget her..."></textarea>
+    <br>
+    <button id="loginButton">Log ind med Google</button>
     <br>
     <button onclick="copyText()">Kopier</button>
     <p id="status"></p>
@@ -20,7 +21,7 @@
       // Firebase-konfiguration
       const firebaseConfig = {
           apiKey: "AIzaSyAoY_XxClJRTUS6OJmaIDvZm014Lx7sXA4",
-          authDomain: "copypaste2000-5776c.firebaseapp.com",
+          authDomain: "mohaulik.github.io",
           databaseURL: "https://copypaste2000-5776c-default-rtdb.firebaseio.com",
           projectId: "copypaste2000-5776c",
           storageBucket: "copypaste2000-5776c.appspot.com",
@@ -31,7 +32,20 @@
 
       // Initialiser Firebase
       const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
       const database = firebase.database();
+
+      // Google Sign-in med Popup
+      document.getElementById('loginButton').addEventListener('click', () => {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          auth.signInWithPopup(provider)
+              .then((result) => {
+                  console.log("Bruger logget ind:", result.user.displayName);
+              })
+              .catch((error) => {
+                  console.error("Login-fejl:", error.message);
+              });
+      });
 
       // Reference til Realtime Database
       const textRef = database.ref('sharedText');
